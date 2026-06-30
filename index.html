@@ -79,7 +79,7 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
       <li><a href="/dashboard.html">Dashboard</a></li>
       <li><a href="/NOVAGENT-DOCUMENTATION.md">Docs</a></li>
     </ul>
-    <div><a href="https://t.me/novagent_bot" class="btn btn-primary">Get Started</a></div>
+    <div><a href="#" class="btn btn-primary" onclick="startChat(event)">Get Started</a></div>
   </div>
 </div>
 
@@ -254,11 +254,21 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
       <button class="nchat-close" onclick="toggleChat()">&#x2715;</button>
     </div>
     <div class="nchat-tabs">
-      <button class="nchat-tab active" id="nchatTabChat" onclick="switchChatTab('chat')">&#x1F4AC; Chat</button>
+      <button class="nchat-tab" id="nchatTabChat" onclick="switchChatTab('chat')">&#x1F4AC; Chat</button>
       <button class="nchat-tab" id="nchatTabTelegram" onclick="switchChatTab('telegram')">&#x2708;&#xFE0F; Telegram</button>
     </div>
     <div class="nchat-body" id="nchatBody">
-      <div id="nchatChatContent">
+      <div id="nchatStartContent">
+        <div class="nchat-telegram" style="margin-top:8px;">
+          <h4 style="margin-bottom:10px;">Start a conversation</h4>
+          <p style="color:#94A3B8;font-size:.85rem;margin-bottom:16px;">Chat directly here for faster replies, or continue on Telegram.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button class="nchat-send" onclick="startChat()">Chat on Website</button>
+            <a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank" rel="noopener">Open Telegram</a>
+          </div>
+        </div>
+      </div>
+      <div id="nchatChatContent" style="display:none;">
         <div id="nchatMessages"></div>
         <div id="nchatForm">
           <div class="nchat-contact">
@@ -293,8 +303,18 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
   function switchChatTab(tab) {
     document.getElementById('nchatTabChat').classList.toggle('active', tab === 'chat');
     document.getElementById('nchatTabTelegram').classList.toggle('active', tab === 'telegram');
-    document.getElementById('nchatChatContent').style.display = tab === 'chat' ? 'block' : 'none';
-    document.getElementById('nchatTelegramContent').style.display = tab === 'telegram' ? 'block' : 'none';
+    const isChat = tab === 'chat';
+    document.getElementById('nchatStartContent').style.display = isChat ? 'none' : 'block';
+    document.getElementById('nchatChatContent').style.display = isChat ? 'block' : 'none';
+    document.getElementById('nchatTelegramContent').style.display = isChat ? 'none' : 'block';
+  }
+  function startChat(e) {
+    if (e) e.preventDefault();
+    chatOpen = true;
+    document.getElementById('nchatPanel').classList.add('open');
+    document.getElementById('nchatBubble').classList.add('open');
+    switchChatTab('chat');
+    loadMessages();
   }
   function loadMessages() {
     const saved = localStorage.getItem('novagent_chat_msgs');
