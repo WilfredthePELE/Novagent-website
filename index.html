@@ -174,74 +174,9 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
     Built on Hermes Agent &bull; Secured by NemoClaw</p>
   </div>
 </footer>
-<!-- Novagent Chat Widget - Inject into any page -->
+<link rel="stylesheet" href="/chat-widget.css">
 <div id="novagent-chat-widget">
-  <style>
-    #novagent-chat-widget * { margin: 0; padding: 0; box-sizing: border-box; }
-    .nchat-bubble {
-      position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-      width: 56px; height: 56px; border-radius: 50%;
-      background: linear-gradient(135deg, #6366F1, #22D3EE);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .nchat-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(99,102,241,0.6); }
-    .nchat-bubble svg { width: 26px; height: 26px; fill: white; }
-    .nchat-bubble.open { transform: rotate(45deg); background: #EF4444; }
-    .nchat-panel {
-      position: fixed; bottom: 92px; right: 24px; z-index: 99998;
-      width: 360px; max-height: 520px;
-      background: #0F0F17; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      display: none; flex-direction: column; overflow: hidden;
-      backdrop-filter: blur(20px);
-    }
-    .nchat-panel.open { display: flex; }
-    @media (max-width: 480px) {
-      .nchat-panel { width: calc(100vw - 32px); right: 16px; bottom: 84px; max-height: 60vh; }
-      .nchat-bubble { bottom: 16px; right: 16px; }
-    }
-    .nchat-header { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px; }
-    .nchat-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #6366F1, #22D3EE); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
-    .nchat-header-info { flex: 1; }
-    .nchat-header-name { font-weight: 600; font-size: 0.9rem; color: #F1F5F9; }
-    .nchat-header-status { font-size: 0.75rem; color: #34D399; display: flex; align-items: center; gap: 4px; }
-    .nchat-header-status::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
-    .nchat-close { background: none; border: none; color: #64748B; cursor: pointer; font-size: 1.2rem; padding: 4px; }
-    .nchat-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .nchat-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 500; color: #64748B; border: none; background: none; border-bottom: 2px solid transparent; }
-    .nchat-tab.active { color: #6366F1; border-bottom-color: #6366F1; }
-    .nchat-body { flex: 1; overflow-y: auto; padding: 12px 16px; min-height: 200px; max-height: 280px; }
-    .nchat-msg { margin-bottom: 10px; max-width: 85%; }
-    .nchat-msg.bot { margin-right: auto; }
-    .nchat-msg.user { margin-left: auto; }
-    .nchat-msg-bubble { padding: 10px 14px; border-radius: 12px; font-size: 0.83rem; line-height: 1.5; word-wrap: break-word; }
-    .nchat-msg.bot .nchat-msg-bubble { background: rgba(99,102,241,0.12); color: #E2E8F0; border-bottom-left-radius: 4px; }
-    .nchat-msg.user .nchat-msg-bubble { background: #6366F1; color: white; border-bottom-right-radius: 4px; }
-    .nchat-msg-time { font-size: 0.65rem; color: #64748B; margin-top: 2px; }
-    .nchat-contact { padding: 8px 0; }
-    .nchat-input-group { margin-bottom: 10px; }
-    .nchat-input-group label { display: block; font-size: 0.75rem; color: #94A3B8; margin-bottom: 4px; font-weight: 500; }
-    .nchat-input { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #F1F5F9; font-size: 0.85rem; outline: none; }
-    .nchat-input:focus { border-color: #6366F1; }
-    .nchat-input::placeholder { color: #475569; }
-    textarea.nchat-input { resize: vertical; min-height: 60px; }
-    .nchat-send { width: 100%; padding: 10px; background: linear-gradient(135deg, #6366F1, #22D3EE); border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-    .nchat-send:hover { opacity: 0.9; transform: translateY(-1px); }
-    .nchat-telegram { text-align: center; padding: 20px 0; }
-    .nchat-telegram-icon { width: 64px; height: 64px; margin: 0 auto 12px; background: linear-gradient(135deg, #0088CC, #00A8FF); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .nchat-telegram-icon svg { width: 32px; height: 32px; fill: white; }
-    .nchat-telegram h4 { color: #F1F5F9; font-size: 1rem; margin-bottom: 6px; }
-    .nchat-telegram p { color: #94A3B8; font-size: 0.8rem; margin-bottom: 16px; }
-    .nchat-telegram-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #0088CC, #00A8FF); border: none; border-radius: 8px; color: white; font-weight: 600; text-decoration: none; font-size: 0.9rem; }
-    .nchat-telegram-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .nchat-footer { padding: 8px 16px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 0.7rem; color: #475569; }
-    .nchat-success { text-align: center; padding: 20px; color: #34D399; }
-    .nchat-error { text-align: center; padding: 10px; color: #EF4444; font-size: 0.8rem; }
-  </style>
-  <button class="nchat-bubble" id="nchatBubble" onclick="toggleChat()" aria-label="Chat with Novagent">
+  <button class="nchat-bubble" id="nchatBubble" aria-label="Chat with Novagent" aria-expanded="false">
     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg>
   </button>
   <div class="nchat-panel" id="nchatPanel">
@@ -249,110 +184,54 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
       <div class="nchat-avatar">N</div>
       <div class="nchat-header-info">
         <div class="nchat-header-name">Novagent AI</div>
-        <div class="nchat-header-status" id="nchatStatus">Online</div>
+        <div class="nchat-header-status">Online</div>
       </div>
-      <button class="nchat-close" onclick="toggleChat()">&#x2715;</button>
+      <button class="nchat-close" id="nchatClose" aria-label="Close chat">✕</button>
     </div>
+
     <div class="nchat-tabs">
-      <button class="nchat-tab" id="nchatTabChat" onclick="switchChatTab('chat')">&#x1F4AC; Chat</button>
-      <button class="nchat-tab" id="nchatTabTelegram" onclick="switchChatTab('telegram')">&#x2708;&#xFE0F; Telegram</button>
+      <button class="nchat-tab active" data-tab="chat">💬 Chat</button>
+      <button class="nchat-tab" data-tab="telegram">✈️ Telegram</button>
     </div>
+
     <div class="nchat-body" id="nchatBody">
-      <div id="nchatStartContent">
-        <div class="nchat-telegram" style="margin-top:8px;">
-          <h4 style="margin-bottom:10px;">Start a conversation</h4>
-          <p style="color:#94A3B8;font-size:.85rem;margin-bottom:16px;">Chat directly here for faster replies, or continue on Telegram.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <button class="nchat-send" onclick="startChat()">Chat on Website</button>
-            <a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank" rel="noopener">Open Telegram</a>
-          </div>
+      <div id="nchatStartContent" class="nchat-start">
+        <h4>Start a conversation</h4>
+        <p>Chat directly here for faster replies, or continue on Telegram.</p>
+        <div class="nchat-start-actions">
+          <button class="nchat-send" id="nchatStartChatBtn">Chat on Website</button>
+          <a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank" rel="noopener">Open Telegram</a>
         </div>
       </div>
+
       <div id="nchatChatContent" style="display:none;">
         <div id="nchatMessages"></div>
-        <div id="nchatForm">
-          <div class="nchat-contact">
-            <div class="nchat-input-group"><label>Your Name</label><input class="nchat-input" id="nchatName" placeholder="e.g. John" maxlength="50"></div>
-            <div class="nchat-input-group"><label>Email (optional)</label><input class="nchat-input" id="nchatEmail" placeholder="for follow-up" maxlength="100" type="email"></div>
-            <div class="nchat-input-group"><label>Message</label><textarea class="nchat-input" id="nchatMessage" placeholder="Tell us what you need..." maxlength="1000" rows="3" style="min-height:60px;"></textarea></div>
-            <div id="nchatSendResult"></div>
-            <button class="nchat-send" id="nchatSendBtn" onclick="sendChatMessage()">Send Message &rarr;</button>
-          </div>
+        <div class="nchat-contact">
+          <div class="nchat-input-group"><label>Your Name</label><input class="nchat-input" id="nchatName" placeholder="e.g. John" maxlength="50"></div>
+          <div class="nchat-input-group"><label>Email (optional)</label><input class="nchat-input" id="nchatEmail" placeholder="for follow-up" maxlength="100" type="email"></div>
+          <div class="nchat-input-group"><label>Message</label><textarea class="nchat-input" id="nchatMessage" placeholder="Tell us what you need..." maxlength="1000" rows="3"></textarea></div>
+          <div id="nchatSendResult"></div>
+          <button class="nchat-send" id="nchatSendBtn">Send Message →</button>
         </div>
       </div>
-      <div id="nchatTelegramContent" style="display:none;">
-        <div class="nchat-telegram">
-          <div class="nchat-telegram-icon">
-            <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg>
-          </div>
-          <h4>Chat on Telegram</h4>
-          <p>Get instant responses from our AI agent directly on Telegram.</p>
-          <a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg>
-            Open Telegram
-          </a>
-          <p style="margin-top:12px;font-size:0.75rem;color:#64748B;">Bot: <strong>@novagent_bot</strong> &bull; 24/7</p>
+
+      <div id="nchatTelegramContent" style="display:none;" class="nchat-telegram">
+        <div class="nchat-telegram-icon">
+          <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg>
         </div>
+        <h4>Chat on Telegram</h4>
+        <p>Get instant responses from our AI agent directly on Telegram.</p>
+        <a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg>
+          Open Telegram
+        </a>
+        <p style="margin-top:10px;font-size:0.75rem;color:#64748B;">Bot: <strong>@novagent_bot</strong> &bull; 24/7</p>
       </div>
     </div>
+
     <div class="nchat-footer">Novagent &bull; Intelligence That Delivers</div>
   </div>
-  <script>
-  let chatOpen = false;
-  function toggleChat() { chatOpen = !chatOpen; document.getElementById('nchatPanel').classList.toggle('open'); document.getElementById('nchatBubble').classList.toggle('open'); if (chatOpen) loadMessages(); }
-  function switchChatTab(tab) {
-    document.getElementById('nchatTabChat').classList.toggle('active', tab === 'chat');
-    document.getElementById('nchatTabTelegram').classList.toggle('active', tab === 'telegram');
-    const isChat = tab === 'chat';
-    document.getElementById('nchatStartContent').style.display = isChat ? 'none' : 'block';
-    document.getElementById('nchatChatContent').style.display = isChat ? 'block' : 'none';
-    document.getElementById('nchatTelegramContent').style.display = isChat ? 'none' : 'block';
-  }
-  function startChat(e) {
-    if (e) e.preventDefault();
-    chatOpen = true;
-    document.getElementById('nchatPanel').classList.add('open');
-    document.getElementById('nchatBubble').classList.add('open');
-    switchChatTab('chat');
-    loadMessages();
-  }
-  function loadMessages() {
-    const saved = localStorage.getItem('novagent_chat_msgs');
-    const c = document.getElementById('nchatMessages');
-    if (!saved) { c.innerHTML = '<div class="nchat-msg bot"><div class="nchat-msg-bubble">&#x1F44B; Hi! I\'m Novagent. Send a message and I\'ll get back to you. Or use Telegram for instant replies!</div></div>'; return; }
-    try { c.innerHTML = JSON.parse(saved).map(m => '<div class="nchat-msg '+m.role+'"><div class="nchat-msg-bubble">'+m.text+'</div></div>').join(''); }
-    catch(e) { c.innerHTML = '<div class="nchat-msg bot"><div class="nchat-msg-bubble">&#x1F4AC; How can Novagent help you?</div></div>'; }
-  }
-  function addMessage(role, text) {
-    const c = document.getElementById('nchatMessages');
-    c.insertAdjacentHTML('beforeend', '<div class="nchat-msg '+role+'"><div class="nchat-msg-bubble">'+text+'</div></div>');
-    c.scrollTop = c.scrollHeight;
-    let msgs = JSON.parse(localStorage.getItem('novagent_chat_msgs') || '[]');
-    if (msgs.length === 0) msgs.push({role:'bot', text:'&#x1F44B; Hi! I\'m Novagent. Send a message and I\'ll get back to you. Or use Telegram for instant replies!'});
-    msgs.push({role, text});
-    if (msgs.length > 50) msgs = msgs.slice(-50);
-    localStorage.setItem('novagent_chat_msgs', JSON.stringify(msgs));
-  }
-  async function sendChatMessage() {
-    const name = document.getElementById('nchatName').value.trim();
-    const email = document.getElementById('nchatEmail').value.trim();
-    const msg = document.getElementById('nchatMessage').value.trim();
-    const btn = document.getElementById('nchatSendBtn');
-    const r = document.getElementById('nchatSendResult');
-    if (!name || !msg) { r.innerHTML = '<div class="nchat-error">Please enter your name and message</div>'; setTimeout(function(){r.innerHTML='';},3000); return; }
-    btn.disabled = true; btn.textContent = 'Sending...';
-    addMessage('user', msg);
-    try {
-      const resp = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,message:msg,source:'website'}) });
-      if (resp.ok) { r.innerHTML = '<div class="nchat-success">&#x2705; Message sent!</div>'; document.getElementById('nchatMessage').value = ''; addMessage('bot', '&#x2705; Thanks '+name+'! Message received. For instant replies, try Telegram!'); }
-      else throw new Error('Server error');
-    } catch(e) { r.innerHTML = '<div class="nchat-error">&#x26A0;&#xFE0F; Server unavailable. Try Telegram instead!</div>'; addMessage('bot', '&#x26A0;&#xFE0F; Chat server unavailable. Please message on Telegram: t.me/novagent_bot'); }
-    btn.disabled = false; btn.textContent = 'Send Message \u2192';
-    setTimeout(function(){r.innerHTML='';},4000);
-  }
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey && document.activeElement && document.activeElement.id === 'nchatMessage') { e.preventDefault(); sendChatMessage(); }
-  });
-  </script>
 </div>
+<script src="/chat-widget.js"></script>
 </body>
+</html>

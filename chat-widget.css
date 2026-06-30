@@ -1,0 +1,286 @@
+/* Novagent Chat Widget */
+#novagent-chat-widget * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+.nchat-bubble {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 99999;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #6366F1, #22D3EE);
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(99,102,241,0.35), 0 2px 8px rgba(0,0,0,0.18);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.nchat-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(99,102,241,0.45), 0 4px 12px rgba(0,0,0,0.22);
+}
+.nchat-bubble svg { width: 28px; height: 28px; fill: white; }
+.nchat-bubble.open {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border-color: rgba(255,255,255,0.18);
+  transform: rotate(90deg);
+}
+
+.nchat-panel {
+  position: fixed;
+  bottom: 104px;
+  right: 28px;
+  z-index: 99998;
+  width: 380px;
+  height: 520px;
+  max-height: calc(100vh - 140px);
+  background: rgba(18, 18, 28, 0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.35);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(18px);
+}
+.nchat-panel.open { display: flex; }
+
+@media (max-width: 480px) {
+  .nchat-panel {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 96px;
+    height: 480px;
+    border-radius: 16px;
+  }
+  .nchat-bubble { bottom: 20px; right: 18px; width: 56px; height: 56px; border-radius: 16px; }
+}
+
+.nchat-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.02);
+}
+.nchat-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366F1, #22D3EE);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.nchat-header-info { flex: 1; min-width: 0; }
+.nchat-header-name { font-weight: 600; font-size: 0.92rem; color: #F1F5F9; }
+.nchat-header-status {
+  font-size: 0.75rem;
+  color: #34D399;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+.nchat-header-status::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34D399;
+  box-shadow: 0 0 6px rgba(52,211,153,0.5);
+}
+.nchat-close {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #94A3B8;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all .15s ease;
+}
+.nchat-close:hover { background: rgba(255,255,255,0.1); color: #F1F5F9; }
+
+.nchat-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.01);
+}
+.nchat-tab {
+  flex: 1;
+  padding: 11px 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748B;
+  border: none;
+  background: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s ease;
+}
+.nchat-tab.active { color: #6366F1; border-bottom-color: #6366F1; }
+.nchat-tab:hover { color: #94A3B8; }
+
+.nchat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  min-height: 220px;
+  max-height: 300px;
+  background: rgba(0,0,0,0.12);
+}
+.nchat-msg { margin-bottom: 10px; max-width: 82%; animation: nchatIn .2s ease; }
+@keyframes nchatIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.nchat-msg.bot { margin-right: auto; }
+.nchat-msg.user { margin-left: auto; }
+
+.nchat-msg-bubble {
+  padding: 11px 15px;
+  border-radius: 14px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  letter-spacing: 0.01em;
+}
+.nchat-msg.bot .nchat-msg-bubble {
+  background: rgba(99,102,241,0.14);
+  color: #E2E8F0;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(99,102,241,0.12);
+}
+.nchat-msg.user .nchat-msg-bubble {
+  background: linear-gradient(135deg, #6366F1, #4F46E5);
+  color: white;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.25);
+}
+
+.nchat-contact { padding: 10px 0; }
+.nchat-input-group { margin-bottom: 10px; }
+.nchat-input-group label {
+  display: block;
+  font-size: 0.72rem;
+  color: #94A3B8;
+  margin-bottom: 5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.nchat-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #F1F5F9;
+  font-size: 0.88rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color .15s ease, background .15s ease;
+}
+.nchat-input:focus {
+  border-color: #6366F1;
+  background: rgba(99,102,241,0.06);
+}
+.nchat-input::placeholder { color: #475569; }
+textarea.nchat-input { resize: none; min-height: 54px; }
+
+.nchat-send {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #6366F1, #22D3EE);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.nchat-send:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(99,102,241,0.35); }
+.nchat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.nchat-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+}
+.nchat-start h4 { color: #F1F5F9; font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+.nchat-start p { color: #94A3B8; font-size: 0.85rem; margin-bottom: 18px; line-height: 1.5; }
+.nchat-start-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 260px; }
+
+.nchat-telegram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 24px;
+}
+.nchat-telegram-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  background: linear-gradient(135deg, #0088CC, #00A8FF);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,136,204,0.3);
+}
+.nchat-telegram-icon svg { width: 32px; height: 32px; fill: white; }
+.nchat-telegram h4 { color: #F1F5F9; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.nchat-telegram p { color: #94A3B8; font-size: 0.82rem; margin-bottom: 16px; line-height: 1.5; }
+.nchat-telegram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #0088CC, #00A8FF);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.nchat-telegram-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,136,204,0.35); }
+
+.nchat-footer {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+  font-size: 0.7rem;
+  color: #475569;
+  background: rgba(0,0,0,0.15);
+  letter-spacing: 0.03em;
+}
+.nchat-success { text-align: center; padding: 14px; color: #34D399; font-size: 0.85rem; }
+.nchat-error { text-align: center; padding: 10px; color: #F87171; font-size: 0.82rem; background: rgba(239,68,68,0.08); border-radius: 8px; margin-top: 6px; }
+
+.nchat-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #475569;
+  font-size: 0.85rem;
+}
