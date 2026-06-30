@@ -159,7 +159,7 @@ let pnlChart = null, catChart = null;
 
 async function fetchData() {
   try {
-    const resp = await fetch('dashboard-state.json?_=' + Date.now());
+    const resp = await fetch('/dashboard-state.json?_=' + Date.now());
     const raw = await resp.text();
     let data;
     try { data = JSON.parse(raw); } catch(e) {
@@ -320,7 +320,7 @@ textarea.nchat-input{resize:vertical;min-height:60px}
 var c2=false;
 function toggleChat2(){c2=!c2;document.getElementById('nchatPanel2').classList.toggle('open');document.getElementById('nchatBubble2').classList.toggle('open')}
 function switchChatTab2(t,b){document.querySelectorAll('#nchatTabGroup .nchat-tab').forEach(function(x){x.classList.remove('active')});b.classList.add('active');document.getElementById('nchatContentChat').style.display=t==='chat'?'block':'none';document.getElementById('nchatContentTg2').style.display=t==='telegram'?'block':'none'}
-async function sendMsg2(){var n=document.getElementById('nname2').value.trim(),e=document.getElementById('nemail2').value.trim(),m=document.getElementById('nmsg2').value.trim(),b=document.getElementById('nsend2'),r=document.getElementById('nres2');if(!n||!m){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem">Name and message required</div>';setTimeout(function(){r.innerHTML=''},2000);return}b.disabled=true;b.textContent='Sending...';try{var resp=await fetch('http://129.80.58.90:8080/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,message:m,source:'dashboard'})});if(resp.ok){r.innerHTML='<div style="padding:10px;color:#34D399;font-size:.85rem;text-align:center">&#x2705; Sent!</div>';document.getElementById('nmsg2').value='';var mc=document.getElementById('nchatMessages2');mc.insertAdjacentHTML('beforeend','<div class="nchat-msg user"><div class="nchat-msg-bubble">'+m+'</div></div>');mc.scrollTop=mc.scrollHeight}else throw Error()}catch(ex){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem;text-align:center">&#x26A0; Server busy. Try Telegram!</div>'}b.disabled=false;b.textContent='Send \u2192';setTimeout(function(){r.innerHTML=''},3000)}
+async function sendMsg2(){var n=document.getElementById('nname2').value.trim(),e=document.getElementById('nemail2').value.trim(),m=document.getElementById('nmsg2').value.trim(),b=document.getElementById('nsend2'),r=document.getElementById('nres2');if(!n||!m){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem">Name and message required</div>';setTimeout(function(){r.innerHTML=''},2000);return}b.disabled=true;b.textContent='Sending...';try{var resp = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,message:m,source:'dashboard'})});if(resp.ok){r.innerHTML='<div style="padding:10px;color:#34D399;font-size:.85rem;text-align:center">&#x2705; Sent!</div>';document.getElementById('nmsg2').value='';var mc=document.getElementById('nchatMessages2');mc.insertAdjacentHTML('beforeend','<div class="nchat-msg user"><div class="nchat-msg-bubble">'+m+'</div></div>');mc.scrollTop=mc.scrollHeight}else throw Error()}catch(ex){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem;text-align:center">&#x26A0; Server busy. Try Telegram!</div>'}b.disabled=false;b.textContent='Send \u2192';setTimeout(function(){r.innerHTML=''},3000)}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&document.activeElement&&document.activeElement.id==='nmsg2'){e.preventDefault();sendMsg2()}});
 </script>
 </div>

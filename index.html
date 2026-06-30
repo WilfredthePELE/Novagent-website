@@ -77,7 +77,6 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
       <li><a href="#services">Services</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="/dashboard.html">Dashboard</a></li>
-      <li><a href="/login.html">Login</a></li>
       <li><a href="/NOVAGENT-DOCUMENTATION.md">Docs</a></li>
     </ul>
     <div><a href="https://t.me/novagent_bot" class="btn btn-primary">Get Started</a></div>
@@ -324,7 +323,7 @@ footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.
     btn.disabled = true; btn.textContent = 'Sending...';
     addMessage('user', msg);
     try {
-      const resp = await fetch('http://129.80.58.90:8080/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,message:msg,source:'website'}) });
+      const resp = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,message:msg,source:'website'}) });
       if (resp.ok) { r.innerHTML = '<div class="nchat-success">&#x2705; Message sent!</div>'; document.getElementById('nchatMessage').value = ''; addMessage('bot', '&#x2705; Thanks '+name+'! Message received. For instant replies, try Telegram!'); }
       else throw new Error('Server error');
     } catch(e) { r.innerHTML = '<div class="nchat-error">&#x26A0;&#xFE0F; Server unavailable. Try Telegram instead!</div>'; addMessage('bot', '&#x26A0;&#xFE0F; Chat server unavailable. Please message on Telegram: t.me/novagent_bot'); }
