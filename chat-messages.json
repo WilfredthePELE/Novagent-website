@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Test User",
+    "email": "",
+    "message": "Hello Novagent! Testing the widget.",
+    "source": "website",
+    "received_at": "2026-06-28T21:07:00Z",
+    "id": "1782680820780"
+  },
+  {
+    "name": "Telegram Test",
+    "email": "",
+    "message": "Testing Telegram forward from website chat - if you see this, it works!",
+    "source": "website",
+    "received_at": "2026-06-28T21:10:19Z",
+    "id": "1782681019004"
+  },
+  {
+    "name": "Final Test",
+    "email": "",
+    "message": "Testing Telegram from Novagent website - if bot works, this is proof!",
+    "source": "website",
+    "received_at": "2026-06-28T21:13:23Z",
+    "id": "1782681203014"
+  }
+]

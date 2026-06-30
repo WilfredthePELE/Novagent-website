@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novagent — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0A0A0F; --card: rgba(255,255,255,0.03); --card-border: rgba(255,255,255,0.06);
+  --accent: #6366F1; --secondary: #22D3EE; --success: #34D399; --warning: #FBBF24;
+  --text: #F1F5F9; --text2: #94A3B8; --text3: #64748B;
+  --font: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; }
+.mono { font-family: var(--mono), monospace; font-size: 0.85em; }
+.header { background: rgba(10,10,15,0.9); border-bottom: 1px solid var(--card-border); padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+.header-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+.header .tagline { color: var(--text2); font-size: 0.8rem; }
+.header .status { display: flex; align-items: center; gap: 0.5rem; color: var(--text2); font-size: 0.8rem; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-dot.active { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.status-dot.inactive { background: var(--text3); }
+.container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+/* KPIs */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.kpi-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.2rem; }
+.kpi-label { font-size: 0.75rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.kpi-value { font-size: 1.6rem; font-weight: 700; margin: 0.3rem 0; }
+.kpi-sub { font-size: 0.75rem; color: var(--text2); }
+
+/* Charts */
+.chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+@media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+.chart-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.2rem; }
+.chart-card h3 { font-size: 0.85rem; color: var(--text2); margin-bottom: 0.8rem; font-weight: 600; }
+.chart-wrap { position: relative; height: 250px; }
+
+/* Feeds */
+.feed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 900px) { .feed-grid { grid-template-columns: 1fr; } }
+.feed-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.2rem; max-height: 350px; overflow-y: auto; }
+.feed-card h3 { font-size: 0.85rem; color: var(--text2); margin-bottom: 0.8rem; font-weight: 600; position: sticky; top: 0; background: var(--bg); padding-bottom: 0.5rem; }
+.feed-item { padding: 0.5rem 0; border-bottom: 1px solid var(--card-border); font-size: 0.82rem; }
+.feed-item:last-child { border-bottom: none; }
+.feed-time { color: var(--text3); font-size: 0.7rem; }
+.tag { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+.tag.pricing { background: rgba(99,102,241,0.2); color: var(--accent); }
+.tag.routing { background: rgba(34,211,238,0.2); color: var(--secondary); }
+.tag.creative { background: rgba(52,211,153,0.2); color: var(--success); }
+.tag.error { background: rgba(239,68,68,0.2); color: #EF4444; }
+.tag.income { background: rgba(52,211,153,0.15); color: var(--success); }
+.tag.expense { background: rgba(239,68,68,0.15); color: #EF4444; }
+
+/* Agents */
+.agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+.agent-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.8rem; text-align: center; }
+.agent-name { font-weight: 600; font-size: 0.85rem; }
+.agent-status { font-size: 0.75rem; margin-top: 0.2rem; }
+.agent-status.active { color: var(--success); }
+.agent-status.idle { color: var(--text3); }
+
+/* Leads */
+.lead-pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+.lead-stage { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.8rem; text-align: center; }
+.lead-count { font-size: 1.4rem; font-weight: 700; }
+.lead-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; }
+
+.footer { text-align: center; padding: 2rem 0; color: var(--text3); font-size: 0.8rem; border-top: 1px solid var(--card-border); margin-top: 2rem; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>NOVAGENT</h1>
+      <div class="tagline">Intelligence That Delivers</div>
+    </div>
+    <div class="status">
+      <span class="status-dot active" id="statusDot"></span>
+      <span id="statusText">Connected</span>
+      <span style="color:var(--text3);margin-left:0.5rem;" id="lastUpdate">—</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Goal Progress -->
+  <div id="goalSection" style="display:none;margin-bottom:1rem;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1rem;">
+    <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.5rem;">
+      <span id="goalDesc" style="color:var(--text2)"></span>
+      <span id="goalProgress" style="font-weight:600;"></span>
+    </div>
+    <div style="height:8px;background:var(--card-border);border-radius:4px;overflow:hidden;">
+      <div id="goalBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--secondary));border-radius:4px;transition:width 0.5s;"></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card"><div class="kpi-label">Revenue</div><div class="kpi-value" style="color:var(--success)" id="kpiRevenue">$0</div></div>
+    <div class="kpi-card"><div class="kpi-label">Expenses</div><div class="kpi-value" style="color:#EF4444" id="kpiExpenses">$0</div></div>
+    <div class="kpi-card"><div class="kpi-label">Profit</div><div class="kpi-value" style="color:var(--accent)" id="kpiProfit">$0</div></div>
+    <div class="kpi-card"><div class="kpi-label">ROI</div><div class="kpi-value" style="color:var(--warning)" id="kpiROI">0%</div></div>
+    <div class="kpi-card"><div class="kpi-label">MRR</div><div class="kpi-value" style="color:var(--secondary)" id="kpiMRR">$0</div></div>
+    <div class="kpi-card"><div class="kpi-label">Jobs Done</div><div class="kpi-value" style="color:#A78BFA" id="kpiJobs">0</div></div>
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>P&amp;L Over Time</h3>
+      <div class="chart-wrap"><canvas id="pnlChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Revenue by Category</h3>
+      <div class="chart-wrap"><canvas id="catChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Agents -->
+  <div class="chart-card" style="margin-bottom:1rem;">
+    <h3>Agents</h3>
+    <div class="agent-grid" id="agentGrid"></div>
+  </div>
+
+  <!-- Feed Grid -->
+  <div class="feed-grid">
+    <div class="feed-card" id="decisionFeed">
+      <h3>Decision Feed</h3>
+      <div id="decisionsList"><div style="color:var(--text3);font-size:0.85rem;">No decisions yet</div></div>
+    </div>
+    <div class="feed-card" id="transactFeed">
+      <h3>Transactions</h3>
+      <div id="transactionsList"><div style="color:var(--text3);font-size:0.85rem;">No transactions yet</div></div>
+    </div>
+  </div>
+
+  <!-- Leads -->
+  <div class="chart-card" style="margin-top:1rem;">
+    <h3>Lead Pipeline</h3>
+    <div class="lead-pipeline" id="leadPipeline">
+      <div class="lead-stage"><div class="lead-count" id="leadFound">0</div><div class="lead-label">Found</div></div>
+      <div class="lead-stage"><div class="lead-count" id="leadContacted">0</div><div class="lead-label">Contacted</div></div>
+      <div class="lead-stage"><div class="lead-count" id="leadResponded">0</div><div class="lead-label">Responded</div></div>
+      <div class="lead-stage"><div class="lead-count" id="leadConverted">0</div><div class="lead-label">Converted</div></div>
+    </div>
+  </div>
+
+  <div class="footer">Novagent &mdash; Intelligence That Delivers &bull; Autonomous AI Agency</div>
+</div>
+
+<script>
+let pnlChart = null, catChart = null;
+
+async function fetchData() {
+  try {
+    const resp = await fetch('dashboard-state.json?_=' + Date.now());
+    const raw = await resp.text();
+    let data;
+    try { data = JSON.parse(raw); } catch(e) {
+      data = JSON.parse(atob(raw.trim()));
+    }
+    
+    const k = data.kpis || {};
+    document.getElementById('kpiRevenue').textContent = '$' + (k.total_revenue || 0);
+    document.getElementById('kpiExpenses').textContent = '$' + (k.total_expenses || 0);
+    document.getElementById('kpiProfit').textContent = '$' + (k.net_profit || 0);
+    document.getElementById('kpiROI').textContent = (k.roi_percent || 0) + '%';
+    document.getElementById('kpiMRR').textContent = '$' + (k.mrr || 0);
+    document.getElementById('kpiJobs').textContent = k.jobs_completed || 0;
+
+    // Goal
+    const g = data.goal;
+    if (g && g.description) {
+      document.getElementById('goalSection').style.display = 'block';
+      document.getElementById('goalDesc').textContent = g.description;
+      const pct = g.progress || 0;
+      document.getElementById('goalProgress').textContent = pct + '%';
+      document.getElementById('goalBar').style.width = pct + '%';
+    } else {
+      document.getElementById('goalSection').style.display = 'none';
+    }
+
+    // Agents
+    const agents = data.agents || [];
+    const ag = document.getElementById('agentGrid');
+    ag.innerHTML = agents.map(a => `<div class="agent-card"><div class="agent-name">${a.name||'?'}</div><div class="agent-status ${a.status||'idle'}">${(a.status||'idle').toUpperCase()}</div><div style="font-size:0.7rem;color:var(--text3);margin-top:0.2rem">${a.current_task||''}</div></div>`).join('');
+
+    // Decisions
+    const decisions = data.decisions || [];
+    document.getElementById('decisionsList').innerHTML = decisions.slice(-20).reverse().map(d =>
+      `<div class="feed-item"><span class="tag ${d.type||'pricing'}">${(d.type||'decision').toUpperCase()}</span> ${d.context||d.reasoning||''} <span class="feed-time">${d.timestamp||''}</span></div>`
+    ).join('') || '<div style="color:var(--text3);font-size:0.85rem;">No decisions yet</div>';
+
+    // Transactions
+    const txns = data.transactions || [];
+    document.getElementById('transactionsList').innerHTML = txns.slice(-20).reverse().map(t =>
+      `<div class="feed-item"><span class="tag ${t.amount >= 0 ? 'income' : 'expense'}">${t.amount >= 0 ? 'INCOME' : 'EXPENSE'}</span> ${t.description||t.type||'Transaction'} <span class="feed-time">${t.amount >= 0 ? '+' : ''}$${Math.abs(t.amount||0)}</span></div>`
+    ).join('') || '<div style="color:var(--text3);font-size:0.85rem;">No transactions yet</div>';
+
+    // Leads
+    const leads = data.leads || {};
+    document.getElementById('leadFound').textContent = leads.total || 0;
+    document.getElementById('leadContacted').textContent = leads.hot || 0;
+    document.getElementById('leadResponded').textContent = leads.warm || 0;
+    document.getElementById('leadConverted').textContent = (leads.by_stage && leads.by_stage.converted ? leads.by_stage.converted.length : 0);
+
+    // P&L Chart
+    const timeline = data.revenue_timeline || [];
+    if (pnlChart) { pnlChart.destroy(); }
+    const ctx = document.getElementById('pnlChart').getContext('2d');
+    const labels = timeline.map((_,i) => '#'+(i+1));
+    pnlChart = new Chart(ctx, {
+      type: 'line', data: {
+        labels: labels.length ? labels : ['No data'],
+        datasets: [
+          { label: 'Revenue', data: timeline.map(t=>t?.revenue||t?.amount||0) || [0], borderColor: '#34D399', backgroundColor: 'rgba(52,211,153,0.1)', tension: 0.3, fill: true },
+          { label: 'Expenses', data: timeline.map(t=>t?.cost||t?.expense||0) || [0], borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.1)', tension: 0.3, fill: true },
+          { label: 'Profit', data: timeline.map(t=>(t?.revenue||0)-(t?.cost||0)) || [0], borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.1)', tension: 0.3, fill: true }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8', font: {size:11} } } },
+        scales: { x: { ticks: {color:'#64748B'}, grid: {color:'rgba(255,255,255,0.04)'} },
+                 y: { ticks: {color:'#64748B', callback: v=>'$'+v}, grid: {color:'rgba(255,255,255,0.04)'} } } }
+    });
+
+    // Category Chart
+    const cats = data.revenue_by_category || [];
+    if (catChart) { catChart.destroy(); }
+    const ctx2 = document.getElementById('catChart').getContext('2d');
+    catChart = new Chart(ctx2, {
+      type: 'doughnut', data: {
+        labels: cats.length ? cats.map(c=>c.category||c.name||'Other') : ['No data'],
+        datasets: [{ data: cats.length ? cats.map(c=>c.revenue||c.amount||1) : [1],
+          backgroundColor: ['#6366F1','#22D3EE','#34D399','#FBBF24','#A78BFA','#F472B6','#FB923C','#64748B'] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94A3B8', font: {size:10} } } } }
+    });
+
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+    document.getElementById('statusDot').className = 'status-dot active';
+    document.getElementById('statusText').textContent = 'Connected';
+
+  } catch(e) {
+    document.getElementById('statusDot').className = 'status-dot inactive';
+    document.getElementById('statusText').textContent = 'Disconnected';
+    console.error('Dashboard fetch error:', e);
+  }
+}
+
+fetchData();
+setInterval(fetchData, 30000);
+</script>
+<!-- Novagent Chat Widget -->
+<div id="novagent-chat-widget">
+<style>
+#novagent-chat-widget *{margin:0;padding:0;box-sizing:border-box}
+.nchat-bubble{position:fixed;bottom:24px;right:24px;z-index:99999;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#22D3EE);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(99,102,241,0.4);transition:all .3s}
+.nchat-bubble:hover{transform:scale(1.1)}
+.nchat-bubble svg{width:26px;height:26px;fill:#fff}
+.nchat-bubble.open{transform:rotate(45deg);background:#EF4444}
+.nchat-panel{position:fixed;bottom:92px;right:24px;z-index:99998;width:360px;max-height:520px;background:#0F0F17;border:1px solid rgba(255,255,255,.08);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden;backdrop-filter:blur(20px)}
+.nchat-panel.open{display:flex}
+@media(max-width:480px){.nchat-panel{width:calc(100vw - 32px);right:16px;bottom:84px;max-height:60vh}.nchat-bubble{bottom:16px;right:16px}}
+.nchat-header{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.nchat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#22D3EE);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.nchat-header-info{flex:1}
+.nchat-header-name{font-weight:600;font-size:.9rem;color:#F1F5F9}
+.nchat-header-status{font-size:.75rem;color:#34D399;display:flex;align-items:center;gap:4px}
+.nchat-header-status::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#34D399}
+.nchat-close{background:none;border:none;color:#64748B;cursor:pointer;font-size:1.2rem;padding:4px}
+.nchat-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.06)}
+.nchat-tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-size:.8rem;font-weight:500;color:#64748B;border:none;background:none;border-bottom:2px solid transparent}
+.nchat-tab.active{color:#6366F1;border-bottom-color:#6366F1}
+.nchat-body{flex:1;overflow-y:auto;padding:12px 16px;min-height:200px;max-height:280px;font-family:Inter,sans-serif}
+.nchat-msg{margin-bottom:10px;max-width:85%}
+.nchat-msg.bot{margin-right:auto}
+.nchat-msg.user{margin-left:auto}
+.nchat-msg-bubble{padding:10px 14px;border-radius:12px;font-size:.83rem;line-height:1.5;word-wrap:break-word}
+.nchat-msg.bot .nchat-msg-bubble{background:rgba(99,102,241,.12);color:#E2E8F0;border-bottom-left-radius:4px}
+.nchat-msg.user .nchat-msg-bubble{background:#6366F1;color:#fff;border-bottom-right-radius:4px}
+.nchat-contact{padding:8px 0}
+.nchat-input-group{margin-bottom:10px}
+.nchat-input-group label{display:block;font-size:.75rem;color:#94A3B8;margin-bottom:4px;font-weight:500}
+.nchat-input{width:100%;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:#F1F5F9;font-size:.85rem;outline:none;font-family:inherit}
+.nchat-input:focus{border-color:#6366F1}
+.nchat-input::placeholder{color:#475569}
+textarea.nchat-input{resize:vertical;min-height:60px}
+.nchat-send{width:100%;padding:10px;background:linear-gradient(135deg,#6366F1,#22D3EE);border:none;border-radius:8px;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer}
+.nchat-send:hover{opacity:.9}
+.nchat-telegram{text-align:center;padding:20px 0}
+.nchat-telegram-icon{width:64px;height:64px;margin:0 auto 12px;background:linear-gradient(135deg,#0088CC,#00A8FF);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.nchat-telegram-icon svg{width:32px;height:32px;fill:#fff}
+.nchat-telegram h4{color:#F1F5F9;font-size:1rem;margin-bottom:6px}
+.nchat-telegram p{color:#94A3B8;font-size:.8rem;margin-bottom:16px}
+.nchat-telegram-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:linear-gradient(135deg,#0088CC,#00A8FF);border:none;border-radius:8px;color:#fff;font-weight:600;text-decoration:none;font-size:.9rem}
+.nchat-footer{padding:8px 16px;border-top:1px solid rgba(255,255,255,.06);text-align:center;font-size:.7rem;color:#475569}
+</style>
+<button class="nchat-bubble" id="nchatBubble2" onclick="toggleChat2()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg></button>
+<div class="nchat-panel" id="nchatPanel2">
+<div class="nchat-header"><div class="nchat-avatar">N</div><div class="nchat-header-info"><div class="nchat-header-name">Novagent AI</div><div class="nchat-header-status">Online</div></div><button class="nchat-close" onclick="toggleChat2()">&#x2715;</button></div>
+<div class="nchat-tabs"><button class="nchat-tab active" onclick="switchChatTab2('chat',this)">&#x1F4AC; Chat</button><button class="nchat-tab" onclick="switchChatTab2('telegram',this)">&#x2708;&#xFE0F; Telegram</button></div>
+<div class="nchat-body" id="nchatBody2">
+<div id="nchatContentChat">
+<div id="nchatMessages2"><div class="nchat-msg bot"><div class="nchat-msg-bubble">&#x1F44B; Hi! Send us a message or try Telegram for instant replies!</div></div></div>
+<div class="nchat-contact"><div class="nchat-input-group"><label>Name</label><input class="nchat-input" id="nname2" placeholder="Your name" maxlength="50"></div><div class="nchat-input-group"><label>Email</label><input class="nchat-input" id="nemail2" placeholder="optional" maxlength="100" type="email"></div><div class="nchat-input-group"><label>Message</label><textarea class="nchat-input" id="nmsg2" placeholder="What do you need?" maxlength="1000" rows="2" style="min-height:50px"></textarea></div><div id="nres2"></div><button class="nchat-send" id="nsend2" onclick="sendMsg2()">Send &rarr;</button></div>
+</div>
+<div id="nchatContentTg2" style="display:none">
+<div class="nchat-telegram"><div class="nchat-telegram-icon"><svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg></div><h4>Chat on Telegram</h4><p>Get instant responses from our AI agent.</p><a class="nchat-telegram-btn" href="https://t.me/novagent_bot" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 11.9c-.66-.21-.67-.66-.14-.99l18.26-7.04c.56-.24.99.13.82.91l-3.11 14.63c-.13.6-.48.74-1.02.54l-5.31-3.52-2.06 1.99c-.23.22-.42.42-.83.23z"/></svg> Open Telegram</a><p style="margin-top:12px;font-size:.75rem;color:#64748B">@novagent_bot</p></div>
+</div>
+</div>
+<div class="nchat-footer">Novagent &bull; Intelligence That Delivers</div>
+</div>
+<script>
+var c2=false;
+function toggleChat2(){c2=!c2;document.getElementById('nchatPanel2').classList.toggle('open');document.getElementById('nchatBubble2').classList.toggle('open')}
+function switchChatTab2(t,b){document.querySelectorAll('#nchatTabGroup .nchat-tab').forEach(function(x){x.classList.remove('active')});b.classList.add('active');document.getElementById('nchatContentChat').style.display=t==='chat'?'block':'none';document.getElementById('nchatContentTg2').style.display=t==='telegram'?'block':'none'}
+async function sendMsg2(){var n=document.getElementById('nname2').value.trim(),e=document.getElementById('nemail2').value.trim(),m=document.getElementById('nmsg2').value.trim(),b=document.getElementById('nsend2'),r=document.getElementById('nres2');if(!n||!m){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem">Name and message required</div>';setTimeout(function(){r.innerHTML=''},2000);return}b.disabled=true;b.textContent='Sending...';try{var resp=await fetch('http://129.80.58.90:8080/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,message:m,source:'dashboard'})});if(resp.ok){r.innerHTML='<div style="padding:10px;color:#34D399;font-size:.85rem;text-align:center">&#x2705; Sent!</div>';document.getElementById('nmsg2').value='';var mc=document.getElementById('nchatMessages2');mc.insertAdjacentHTML('beforeend','<div class="nchat-msg user"><div class="nchat-msg-bubble">'+m+'</div></div>');mc.scrollTop=mc.scrollHeight}else throw Error()}catch(ex){r.innerHTML='<div style="padding:10px;color:#EF4444;font-size:.8rem;text-align:center">&#x26A0; Server busy. Try Telegram!</div>'}b.disabled=false;b.textContent='Send \u2192';setTimeout(function(){r.innerHTML=''},3000)}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&document.activeElement&&document.activeElement.id==='nmsg2'){e.preventDefault();sendMsg2()}});
+</script>
+</div>
+</body>
+</html>
