@@ -3,6 +3,16 @@
 
   function qs(id) { return document.getElementById(id); }
   function qsa(sel) { return document.querySelectorAll(sel); }
+  function escapeHtml(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+  function mdToHtml(text) {
+    let html = escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+    return html;
+  }
 
   function init() {
     const panel = qs('nchatPanel');
@@ -30,7 +40,6 @@
     panel.classList.add('open');
     bubble.classList.add('open');
     bubble.setAttribute('aria-expanded', 'true');
-    render();
   }
 
   function close() {
@@ -63,6 +72,11 @@
     loadMessages();
   }
 
+  function messageHtml(text) {
+    if (!text) return '';
+    return (/.?[*_]{2}/.test(text) ? mdToHtml : escapeHtml)(text);
+  }
+
   function loadMessages() {
     const container = qs('nchatMessages');
     if (!container) return;
@@ -71,20 +85,21 @@
       container.innerHTML = '<div class="nchat-msg bot"><div class="nchat-msg-bubble">Hey! How can Novagent help you today?</div></div>';
       return;
     }
+    function renderMsg(m) {
+      return '<div class="nchat-msg ' + m.role + '"><div class="nchat-msg-bubble">' + messageHtml(m.text) + '</div></div>';
+    }
     try {
-      container.innerHTML = JSON.parse(saved).map(function(m) {
-        return '<div class="nchat-msg ' + m.role + '"><div class="nchat-msg-bubble">' + m.text + '</div></div>';
-      }).join('');
+      container.innerHTML = JSON.parse(saved).map(renderMsg).join('');
       scrollBottom();
     } catch(e) {
-      container.innerHTML = '<div class="nchat-msg bot"><div class="nchat-msg-bubble">How can Novagent help you?</div></div>';
+      container.innerHTML = renderMsg({ role:'bot', text:'How can Novagent help you?' });
     }
   }
 
   function addMessage(role, text) {
     const container = qs('nchatMessages');
     if (!container) return;
-    container.insertAdjacentHTML('beforeend', '<div class="nchat-msg ' + role + '"><div class="nchat-msg-bubble">' + text + '</div></div>');
+    container.insertAdjacentHTML('beforeend', '<div class="nchat-msg ' + role + '"><div class="nchat-msg-bubble">' + messageHtml(text) + '</div></div>');
     scrollBottom();
     const msgs = JSON.parse(localStorage.getItem('novagent_chat_msgs') || '[]');
     msgs.push({ role: role, text: text });
@@ -163,9 +178,16 @@
     send: sendChatMessage
   };
 
-  window.startChat = function() {
-    startChat();
-  };
+  function bindNavGetStarted() {
+    const btn = qs('navStartChatBtn') || qs('#navStartChatBtn');
+    if (btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        startChat();
+      });
+    }
+  }
 
   init();
+  bindNavGetStarted();
 })();
