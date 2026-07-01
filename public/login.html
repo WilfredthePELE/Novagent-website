@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novagent — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0A0A0F; --card: rgba(255,255,255,0.03); --card-border: rgba(255,255,255,0.08);
+  --accent: #6366F1; --secondary: #22D3EE; --success: #34D399;
+  --text: #F1F5F9; --text2: #94A3B8; --text3: #64748B;
+  --font: 'Inter', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.container { max-width: 420px; width: 100%; padding: 2rem; }
+.logo { text-align: center; margin-bottom: 2rem; }
+.logo h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
+.logo .gradient { background: linear-gradient(135deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.logo p { color: var(--text3); font-size: 0.85rem; margin-top: 0.3rem; }
+.card { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 2rem; backdrop-filter: blur(12px); }
+.card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+.card .subtitle { color: var(--text2); font-size: 0.85rem; margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; font-size: 0.8rem; color: var(--text2); margin-bottom: 0.4rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.form-group input { width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); border-radius: 8px; color: var(--text); font-size: 0.9rem; font-family: var(--font); transition: all 0.2s; }
+.form-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.form-group input::placeholder { color: var(--text3); }
+.btn { display: block; width: 100%; padding: 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #5558E6; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(99,102,241,0.3); }
+.divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; color: var(--text3); font-size: 0.8rem; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+.telegram-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.75rem; border-radius: 8px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid var(--card-border); background: transparent; color: var(--text); transition: all 0.2s; text-decoration: none; }
+.telegram-btn:hover { border-color: var(--accent); background: rgba(99,102,241,0.1); }
+.telegram-btn svg { width: 20px; height: 20px; }
+.footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text3); }
+.footer a { color: var(--accent); text-decoration: none; }
+.error-msg { display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #FCA5A5; padding: 0.75rem; border-radius: 8px; font-size: 0.8rem; margin-bottom: 1rem; text-align: center; }
+.success-msg { display: none; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: #6EE7B7; padding: 0.75rem; border-radius: 8px; font-size: 0.8rem; margin-bottom: 1rem; text-align: center; }
+.demo-badge { display: inline-block; background: rgba(99,102,241,0.15); color: var(--accent); font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <div class="demo-badge">Dashboard Access</div>
+    <h1><span class="gradient">Novagent</span></h1>
+    <p>Intelligence That Delivers</p>
+  </div>
+  <div class="card">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to access the Novagent dashboard</p>
+    <div id="errorMsg" class="error-msg"></div>
+    <div id="successMsg" class="success-msg"></div>
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+    <div class="divider">or</div>
+    <a href="https://t.me/novagent_bot" class="telegram-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Sign in with Telegram
+    </a>
+  </div>
+  <div class="footer">
+    <p><a href="/">← Back to Home</a></p>
+  </div>
+</div>
+<script>
+let loginAttempts = 0;
+function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const errorEl = document.getElementById('errorMsg');
+  const successEl = document.getElementById('successMsg');
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
+  loginAttempts++;
+  if (email === 'admin@novagent.ai' && password === 'novagent123') {
+    successEl.textContent = '✅ Login successful! Redirecting...';
+    successEl.style.display = 'block';
+    setTimeout(() => { window.location.href = '/dashboard.html'; }, 800);
+    return false;
+  }
+  if (loginAttempts >= 3) {
+    errorEl.innerHTML = '🔒 Too many attempts. Sign in with Telegram instead.';
+    errorEl.style.display = 'block';
+    document.getElementById('loginForm').style.display = 'none';
+    return false;
+  }
+  errorEl.textContent = '❌ Invalid. ' + (3 - loginAttempts) + ' attempt(s) left.';
+  errorEl.style.display = 'block';
+  document.getElementById('password').value = '';
+  return false;
+}
+</script>
+</body>
+</html>

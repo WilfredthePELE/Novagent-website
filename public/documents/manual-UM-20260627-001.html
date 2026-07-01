@@ -1,0 +1,95 @@
+<html>
+<head><style>
+body { font-family: 'Inter', sans-serif; max-width: 700px; margin: 0 auto; padding: 40px; color: #1a1a2e; }
+.header { border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }
+.header h1 { color: #6366f1; margin: 0; }
+.header p { color: #64748b; margin: 5px 0 0 0; }
+.section { margin: 25px 0; }
+.section h3 { color: #6366f1; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+.toc { background: #f8fafc; padding: 15px 25px; border-radius: 8px; margin: 20px 0; }
+.toc ol { margin: 5px 0; }
+.toc a { color: #6366f1; text-decoration: none; }
+code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+.footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.85em; }
+</style></head>
+<body>
+<div class="header">
+  <h1>NOVAGENT</h1>
+  <p>Intelligence That Delivers</p>
+</div>
+<h2>USER MANUAL</h2>
+<p><strong>For:</strong> Acme Dashboard v3.0 Analytics Widget Integration Script<br>
+<strong>Prepared for:</strong> Acme Tech Solutions<br>
+<strong>Date:</strong> 20260627<br>
+<strong>Report Reference:</strong> RPT-20260627-001</p>
+
+<div class="toc">
+<h3>TABLE OF CONTENTS</h3>
+<ol>
+<li><a href="#quickstart">Quick Start</a></li>
+<li><a href="#installed">What Was Built</a></li>
+<li><a href="#usage">How to Use It</a></li>
+<li><a href="#config">Configuration Options</a></li>
+<li><a href="#tasks">Common Tasks</a></li>
+<li><a href="#trouble">Troubleshooting</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ol>
+</div>
+
+<div class="section" id="quickstart">
+<h3>1. QUICK START</h3>
+<ol>
+<li>Open your terminal and navigate to the project: <code>cd ~/acme-dashboard</code></li>
+<li>Run the integration script: <code>python3 analytics_widget.py --config config.yaml</code></li>
+<li>Open your browser to <code>http://localhost:8080</code></li>
+<li>The analytics widget will appear on your dashboard</li>
+</ol>
+</div>
+
+<div class="section" id="installed">
+<h3>2. WHAT WAS BUILT</h3>
+<ul>
+<li><strong>analytics_widget.py</strong>: Python script - Pulls data from your API and renders as interactive chart</li>
+<li><strong>config.yaml</strong>: Configuration file at <code>~/acme-dashboard/config.yaml</code></li>
+<li><strong>requirements.txt</strong>: Python dependencies (pandas, plotly, flask)</li>
+<li><strong>Dockerfile</strong>: Container setup for production deployment</li>
+</ul>
+</div>
+
+<div class="section" id="usage">
+<h3>3. HOW TO USE IT</h3>
+<p><strong>Step 1:</strong> Configure your API key in config.yaml</p>
+<p><strong>Step 2:</strong> Run <code>pip install -r requirements.txt</code></p>
+<p><strong>Step 3:</strong> Run <code>python3 analytics_widget.py</code></p>
+<p><strong>Step 4:</strong> Access the dashboard at http://localhost:8080</p>
+</div>
+
+<div class="section" id="config">
+<h3>4. CONFIGURATION OPTIONS</h3>
+<ul>
+<li><strong>api_key</strong>: Your Acme API key (required)</li>
+<li><strong>refresh_interval</strong>: Data refresh in seconds (default: 300)</li>
+<li><strong>theme</strong>: 'light' or 'dark' (default: dark)</li>
+</ul>
+</div>
+
+<div class="section" id="trouble">
+<h3>6. TROUBLESHOOTING</h3>
+<p><strong>Problem:</strong> Widget shows no data<br>
+<strong>Solution:</strong> Check your API key in config.yaml and verify network connectivity</p>
+<p><strong>Problem:</strong> Port 8080 is in use<br>
+<strong>Solution:</strong> Change port in config.yaml: <code>port: 8081</code></p>
+</div>
+
+<div class="section" id="faq">
+<h3>7. FAQ</h3>
+<p><strong>Q:</strong> Can I deploy this to production?<br>
+<strong>A:</strong> Yes - use the included Dockerfile: <code>docker build -t acme-widget . && docker run -p 8080:8080 acme-widget</code></p>
+<p><strong>Q:</strong> Does it support multiple users?<br>
+<strong>A:</strong> Yes - set <code>multi_user: true</code> in config.yaml</p>
+</div>
+
+<div class="footer">
+  <p>NOVAGENT | Intelligence That Detmivers</p>
+</div>
+</body></html>

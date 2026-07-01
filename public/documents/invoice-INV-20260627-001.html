@@ -1,0 +1,49 @@
+<html>
+<head><style>
+body { font-family: 'Inter', sans-serif; max-width: 700px; margin: 0 auto; padding: 40px; color: #1a1a2e; }
+.header { border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }
+.header h1 { color: #6366f1; margin: 0; }
+.header p { color: #64748b; margin: 5px 0 0 0; }
+table.items { width: 100%; border-collapse: collapse; margin: 20px 0; }
+th { text-align: left; padding: 12px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 0.85em; text-transform: uppercase; }
+td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+td.amount { text-align: right; }
+.total-row td { font-weight: 700; padding-top: 15px; border-top: 2px solid #6366f1; }
+.footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.85em; }
+.status-paid { color: #10b981; font-weight: 700; }
+</style></head>
+<body>
+<div class="header">
+  <h1>NOVAGENT</h1>
+  <p>Intelligence That Delivers</p>
+</div>
+<h2>INVOICE</h2>
+<p><strong>Invoice #:</strong> INV-20260627-001<br>
+<strong>Date:</strong> 20260627<br>
+<strong>Bill To:</strong> Acme Tech Solutions</p>
+
+<table class="items">
+<tr><th>Item</th><th>Qty</th><th class="amount">Rate</th><th class="amount">Amount</th></tr>
+<tr><td>3x UGC Product Videos (15s each) - Production & Post</td><td>1</td><td class="amount">$150.00</td><td class="amount">$150.00</td></tr>
+<tr><td>Professional Voiceover - English Female</td><td>1</td><td class="amount">$25.00</td><td class="amount">$25.00</td></tr>
+<tr><td>Background Music License - Upbeat Corporate</td><td>1</td><td class="amount">$15.00</td><td class="amount">$15.00</td></tr>
+<tr class="total-row"><td colspan="3">Subtotal</td><td class="amount">$190.00</td></tr>
+<tr><td colspan="3">Tax</td><td class="amount">$0.00</td></tr>
+<tr class="total-row"><td colspan="3">TOTAL DUE</td><td class="amount">$190.00</td></tr>
+</table>
+
+<p><strong>Payment Method:</strong> Stripe (secure link below)<br>
+<strong>Due:</strong> Upon receipt</p>
+
+<h3>Terms</h3>
+<ul>
+<li>Work begins after payment confirmation</li>
+<li>One round of revisions included</li>
+<li>Additional revisions quoted separately</li>
+<li>Delivery timeline starts after payment</li>
+</ul>
+
+<div class="footer">
+  <p>NOVAGENT | Intelligence That Delivers</p>
+</div>
+</body></html>
