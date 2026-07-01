@@ -163,5 +163,9 @@
     send: sendChatMessage
   };
 
+  window.startChat = function() {
+    startChat();
+  };
+
   init();
 })();
