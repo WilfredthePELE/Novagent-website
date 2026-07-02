@@ -1,0 +1,43 @@
+.car-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden;
+  perspective: 1300px;
+  perspective-origin: 55% 45%;
+}
+
+.car-stage {
+  position: absolute; top: 50%; left: 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.car-img {
+  display: block;
+  height: min(92vh, 820px);
+  width: auto;
+  animation: carFloat 7s ease-in-out infinite;
+  /* feather the rectangular studio background into the page */
+  -webkit-mask-image: radial-gradient(ellipse 60% 72% at 50% 47%, #000 50%, rgba(0,0,0,0.35) 72%, transparent 84%);
+  mask-image: radial-gradient(ellipse 60% 72% at 50% 47%, #000 50%, rgba(0,0,0,0.35) 72%, transparent 84%);
+  filter: drop-shadow(0 34px 46px rgba(20, 20, 25, 0.35));
+}
+
+@keyframes carFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* soft veil top/bottom so nav + footer stay clean */
+.car-layer::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(246,245,242,0.6) 0%, rgba(246,245,242,0) 14%, rgba(246,245,242,0) 84%, rgba(246,245,242,0.55) 100%);
+}
+
+@media (max-width: 860px) {
+  .car-layer { opacity: 0.5; perspective-origin: 50% 45%; }
+  .car-img { height: min(70vh, 560px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-img { animation: none; }
+}
