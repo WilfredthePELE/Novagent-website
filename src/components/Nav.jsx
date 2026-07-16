@@ -13,8 +13,6 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const openChat = () => window.dispatchEvent(new CustomEvent('novagent:open-chat'));
-
   return (
     <header className={`nav ${scrolled ? 'nav--solid' : ''}`}>
       <div className="container nav-inner">
@@ -29,13 +27,13 @@ export default function Nav() {
               {l.label}
             </a>
           ))}
-          <button className="btn btn-primary nav-cta-mobile" onClick={() => { setOpen(false); openChat(); }}>
+          <a href="/studio" className="btn btn-primary nav-cta-mobile" onClick={() => setOpen(false)}>
             Get Started
-          </button>
+          </a>
         </nav>
 
         <div className="nav-right">
-          <button className="btn btn-primary nav-cta" onClick={openChat}>Get Started</button>
+          <a href="/studio" className="btn btn-primary nav-cta">Get Started</a>
           <button
             className={`burger ${open ? 'active' : ''}`}
             aria-label="Toggle menu"

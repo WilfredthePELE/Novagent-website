@@ -140,7 +140,7 @@
 - **URL:** `http://129.80.58.90/login.html`
 - Dark theme matching brand
 - Email/password form
-- Demo credentials: `admin@novagent.ai` / `novagent123`
+- Demo credentials: `Configure demo secret in protected config` / `Keep demo password out of docs`
 - 3-attempt lockout with Telegram redirect
 - "Sign in with Telegram" button
 - Session timeout: 30 minutes
@@ -511,7 +511,8 @@ The Novagent demo video was built using **HyperFrames** and **GSAP**, rendered a
 - **Web Server:** nginx 1.18.0
 - **App Server:** Python chat-server.py (systemd service `novagent-chat`)
 - **Ports:** 80 (HTTP), 8080 (API proxy)
-- **SSH Key:** `C:\Users\HP\Downloads\ssh-key.key`
+| **SSH Key:** `ssh -i <your-local-key>` to server host |
+| **Note:** The real key path and token values are kept out of docs on purpose. |
 
 ### Frontend — Vercel Deployment
 - **Repo:** https://github.com/WilfredthePELE/Novagent-website

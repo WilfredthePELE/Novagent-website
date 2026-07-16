@@ -3,7 +3,6 @@ import Reveal from './ui/Reveal.jsx';
 import './Pricing.css';
 
 export default function Pricing() {
-  const openChat = () => window.dispatchEvent(new CustomEvent('novagent:open-chat'));
   return (
     <section className="section pricing" id="pricing">
       <div className="container">
@@ -25,9 +24,12 @@ export default function Pricing() {
                   <li key={pt}><span className="price-check">✓</span>{pt}</li>
                 ))}
               </ul>
-              <button className={`btn ${p.highlight ? 'btn-primary' : 'btn-outline'} price-cta`} onClick={openChat}>
+              <a
+                className={`btn ${p.highlight ? 'btn-primary' : 'btn-outline'} price-cta`}
+                href={`/studio?intent=${encodeURIComponent(p.tier + ' plan')}`}
+              >
                 Get Started
-              </button>
+              </a>
             </Reveal>
           ))}
         </div>

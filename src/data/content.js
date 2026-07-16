@@ -21,18 +21,30 @@ export const MARQUEE = [
 ];
 
 export const CATEGORIES = [
-  { name: 'Video Production', count: 10, icon: 'video', range: '$60–$400', blurb: 'UGC ads, cinematic production, explainer animation, lip-sync dubbing, character animation.' },
-  { name: 'Image & Design', count: 12, icon: 'image', range: '$30–$250', blurb: 'Product photography, logos, brand identity, infographics, UI mockups, restoration.' },
-  { name: '3D Modeling', count: 4, icon: 'cube', range: '$50–$300', blurb: 'Product models, rapid prototypes, asset packs, 3D exploration video.' },
-  { name: 'Audio & Music', count: 10, icon: 'audio', range: '$25–$200', blurb: 'Voiceover in 70+ languages, voice cloning, custom music, podcasts, audiobooks.' },
-  { name: 'Software Dev', count: 12, icon: 'code', range: '$100–$1,500', blurb: 'Python, scraping, APIs, bots, extensions, databases, pipelines, CLI tools.' },
-  { name: 'Research & Intel', count: 11, icon: 'research', range: '$80–$400', blurb: 'Competitive analysis, market sizing, due diligence, patents, trend scouting.' },
-  { name: 'Data Services', count: 12, icon: 'data', range: '$60–$300', blurb: 'Cleaning, sentiment, financial modeling, dashboards, ML classification, viz.' },
-  { name: 'Content & Copy', count: 12, icon: 'content', range: '$40–$250', blurb: 'Blogs, email, social calendars, sales copy, whitepapers, scripts, newsletters.' },
-  { name: 'Business Ops', count: 11, icon: 'business', range: '$50–$300', blurb: 'Invoicing, SaaS audits, CRM cleanup, KPI dashboards, proposals, bookkeeping.' },
-  { name: 'Translation', count: 5, icon: 'globe', range: '$25–$150', blurb: 'Documents, website localization, subtitles, multilingual content, app strings.' },
-  { name: 'Education', count: 5, icon: 'education', range: '$60–$400', blurb: 'Course materials, training videos, study guides, quizzes, research tutoring.' },
-  { name: 'Tech Support', count: 12, icon: 'support', range: '$10–$200', blurb: 'Software installs, server config, migration, SSH with every command audited.' },
+  { name: 'Video Production', count: 10, icon: 'video', range: '$60–$400', blurb: 'UGC ads, cinematic production, explainer animation, lip-sync dubbing, character animation.',
+    services: ['UGC ads', 'Product promos', 'Talking-head videos', 'Cinematic production', 'Explainer animation', 'Style transfer', 'Logo animation', 'Multi-shot editing', 'Lip-sync dubbing', 'Character animation'] },
+  { name: 'Image & Design', count: 12, icon: 'image', range: '$30–$250', blurb: 'Product photography, logos, brand identity, infographics, UI mockups, restoration.',
+    services: ['Product photography', 'Logo design', 'Social media graphics', 'Brand identity', 'Infographics', 'UI mockups', 'Photo editing', 'Architecture visualization', 'Book covers', 'Textures & patterns', 'Photo restoration', 'Meme creation'] },
+  { name: '3D Modeling', count: 4, icon: 'cube', range: '$50–$300', blurb: 'Product models, rapid prototypes, asset packs, 3D exploration video.',
+    services: ['Product models', 'Rapid prototypes', 'Asset packs', '3D exploration video'] },
+  { name: 'Audio & Music', count: 10, icon: 'audio', range: '$25–$200', blurb: 'Voiceover in 70+ languages, voice cloning, custom music, podcasts, audiobooks.',
+    services: ['Voiceover (70+ languages)', 'Voice cloning', 'Custom music', 'Podcast production', 'Audiobooks', 'Sound effects', 'Multilingual dubbing', 'Audio branding', 'Transcription', 'Song creation'] },
+  { name: 'Software Dev', count: 12, icon: 'code', range: '$100–$1,500', blurb: 'Python, scraping, APIs, bots, extensions, databases, pipelines, CLI tools.',
+    services: ['Python scripts', 'Web scraping', 'API development', 'Bots', 'Chrome extensions', 'Databases', 'WordPress', 'GitHub automation', 'Data pipelines', 'Code review', 'CLI tools', 'Spreadsheet automation'] },
+  { name: 'Research & Intel', count: 11, icon: 'research', range: '$80–$400', blurb: 'Competitive analysis, market sizing, due diligence, patents, trend scouting.',
+    services: ['Competitive analysis', 'Market sizing', 'Due diligence', 'Patent search', 'Literature review', 'Pricing strategy', 'Trend analysis', 'Real-estate research', 'Tech scouting', 'Background checks', 'Industry reports'] },
+  { name: 'Data Services', count: 12, icon: 'data', range: '$60–$300', blurb: 'Cleaning, sentiment, financial modeling, dashboards, ML classification, viz.',
+    services: ['Data cleaning', 'Sentiment analysis', 'Financial modeling', 'Dashboards', 'Surveys', 'PDF extraction', 'Web aggregation', 'A/B testing', 'ML classification', 'Visualization', 'Resume parsing', 'Translation'] },
+  { name: 'Content & Copy', count: 12, icon: 'content', range: '$40–$250', blurb: 'Blogs, email, social calendars, sales copy, whitepapers, scripts, newsletters.',
+    services: ['Blog posts', 'Email campaigns', 'Social calendars', 'Product descriptions', 'Sales copy', 'Technical docs', 'Whitepapers', 'Press releases', 'Grant writing', 'Scripts', 'Resume optimization', 'Newsletters'] },
+  { name: 'Business Ops', count: 11, icon: 'business', range: '$50–$300', blurb: 'Invoicing, SaaS audits, CRM cleanup, KPI dashboards, proposals, bookkeeping.',
+    services: ['Invoicing', 'Expense categorization', 'SaaS audit', 'CRM cleanup', 'Meeting prep', 'KPI dashboards', 'Competitor monitoring', 'Proposals', 'Bookkeeping', 'Onboarding', 'Market monitoring'] },
+  { name: 'Translation', count: 5, icon: 'globe', range: '$25–$150', blurb: 'Documents, website localization, subtitles, multilingual content, app strings.',
+    services: ['Document translation', 'Website localization', 'Subtitle translation', 'Multilingual content', 'App string localization'] },
+  { name: 'Education', count: 5, icon: 'education', range: '$60–$400', blurb: 'Course materials, training videos, study guides, quizzes, research tutoring.',
+    services: ['Course materials', 'Training videos', 'Study guides', 'Quizzes', 'Research tutoring'] },
+  { name: 'Tech Support', count: 12, icon: 'support', range: '$10–$200', blurb: 'Software installs, server config, migration, SSH with every command audited.',
+    services: ['Software installation', 'Server configuration', 'Environment setup', 'Troubleshooting', 'Data migration', 'SSH guided sessions', 'Dependency setup', 'Performance tuning', 'Backup configuration', 'Security hardening', 'Remote monitoring', 'Command auditing'] },
 ];
 
 export const FEATURES = [
@@ -99,6 +111,23 @@ export const NAV_LINKS = [
   { label: 'Security', href: '#security' },
   { label: 'Process', href: '#process' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Dashboard', href: '/dashboard.html' },
   { label: 'Docs', href: '/NOVAGENT-DOCUMENTATION.md' },
+];
+
+// Studio — quick prompt starters shown in the empty state.
+export const STUDIO_PROMPTS = [
+  'Make a 30-second UGC ad for my skincare brand',
+  'Build a Python script that scrapes competitor prices daily',
+  'Design a logo and brand identity for a coffee startup',
+  'Research the market size for AI note-taking apps',
+  'Clean this messy CSV and build a dashboard',
+  'Write a 6-email launch sequence for a SaaS product',
+];
+
+// Seed feedback shown on the community wall (real submissions append to these).
+export const SEED_FEEDBACK = [
+  { name: 'Maya R.', role: 'Founder, Skincare DTC', rating: 5, text: 'Delivered three UGC variants overnight. One is already my best-performing ad.' },
+  { name: 'Daniel K.', role: 'Indie developer', rating: 5, text: 'Asked for a scraping bot with a dashboard — got working code, a manual, and an invoice. Wild.' },
+  { name: 'Priya S.', role: 'Agency owner', rating: 4, text: 'The preview-before-pay flow builds real trust with my own clients. I resell it.' },
+  { name: 'Tomás L.', role: 'E-commerce', rating: 5, text: 'Product photography + localization for 4 languages in a day. The paper trail is spotless.' },
 ];

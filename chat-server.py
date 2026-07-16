@@ -8,7 +8,7 @@ MESSAGES_FILE = os.path.expanduser("~/novagent-website/chat-messages.json")
 HOST = "0.0.0.0"
 PORT = 8080
 TBOT = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-TCID = os.environ.get("TELEGRAM_CHAT_ID", "7062483348")
+TCID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 
 class Handler(BaseHTTPRequestHandler):

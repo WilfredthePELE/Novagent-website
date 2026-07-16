@@ -3,6 +3,7 @@
 
 **Version:** 1.0 | **Skills:** 48 | **Services:** ~116 across 12 categories
 **Platform:** Hermes Agent | **Security:** 3-Layer Stack (NemoClaw + Tool Trust + Spend Gates)
+**Platform:** Hermes Agent | **Security:** 3-Layer Stack (NemoClaw + Tool Trust + Spend Gates)
 
 ---
 

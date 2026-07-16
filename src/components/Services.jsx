@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { CATEGORIES } from '../data/content.js';
 import Reveal from './ui/Reveal.jsx';
 import Icon from './ui/Icon.jsx';
+import ServiceModal from './ServiceModal.jsx';
 import './Services.css';
 
-function ServiceCard({ cat, i }) {
+function ServiceCard({ cat, i, onOpen }) {
   const ref = useRef(null);
 
   const onMove = (e) => {
@@ -27,7 +28,15 @@ function ServiceCard({ cat, i }) {
 
   return (
     <Reveal i={i % 4} className="service-card-wrap">
-      <div className="service-card" ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <button
+        type="button"
+        className="service-card"
+        ref={ref}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        onClick={() => onOpen(cat)}
+        aria-label={`View all ${cat.count} ${cat.name} services`}
+      >
         <div className="service-glow" />
         <div className="service-top">
           <span className="service-icon"><Icon name={cat.icon} size={22} /></span>
@@ -37,29 +46,32 @@ function ServiceCard({ cat, i }) {
         <p>{cat.blurb}</p>
         <div className="service-foot">
           <span className="service-range">{cat.range}</span>
-          <span className="service-arrow">→</span>
+          <span className="service-arrow">View all →</span>
         </div>
-      </div>
+      </button>
     </Reveal>
   );
 }
 
 export default function Services() {
+  const [active, setActive] = useState(null);
   return (
     <section className="section services" id="services">
       <div className="container">
         <div className="section-head">
           <span className="eyebrow">12 Categories · 116 Services</span>
           <h2>Everything an agency does, <span className="accent-word">autonomously</span></h2>
-          <p>From cinematic video to full-stack software, research to translation. One agent, priced transparently, delivered with a full paper trail.</p>
+          <p>From cinematic video to full-stack software, research to translation. Tap any category to see every service — priced transparently, delivered with a full paper trail.</p>
         </div>
 
         <div className="services-grid">
           {CATEGORIES.map((cat, i) => (
-            <ServiceCard cat={cat} i={i} key={cat.name} />
+            <ServiceCard cat={cat} i={i} key={cat.name} onOpen={setActive} />
           ))}
         </div>
       </div>
+
+      <ServiceModal category={active} onClose={() => setActive(null)} />
     </section>
   );
 }

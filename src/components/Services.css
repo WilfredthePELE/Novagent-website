@@ -2,7 +2,8 @@
 .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
 .service-card-wrap { perspective: 1000px; }
 .service-card {
-  position: relative; height: 100%;
+  position: relative; height: 100%; width: 100%; display: block; text-align: left;
+  font-family: inherit; color: inherit; cursor: pointer; -webkit-appearance: none; appearance: none;
   background: var(--card); border: 1px solid var(--card-border);
   border-radius: 14px; padding: 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -11,6 +12,7 @@
   transition: transform 0.18s var(--ease), border-color 0.3s, box-shadow 0.3s;
   overflow: hidden;
 }
+.service-card:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; }
 .service-card:hover { border-color: var(--card-border-hover); box-shadow: var(--shadow-md); }
 .service-glow {
   position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; pointer-events: none;

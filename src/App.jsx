@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import Lenis from 'lenis';
+import { useState, useEffect } from 'react';
 import Nav from './components/Nav.jsx';
 import Hero from './components/Hero.jsx';
 import Marquee from './components/Marquee.jsx';
@@ -13,53 +12,33 @@ import Footer from './components/Footer.jsx';
 import ChatWidget from './components/ChatWidget.jsx';
 import ScrollProgress from './components/ScrollProgress.jsx';
 import Preloader from './components/Preloader.jsx';
-import CarLayer from './components/CarLayer.jsx';
+import AuroraBackground from './components/AuroraBackground.jsx';
+import Studio from './components/Studio.jsx';
+
+const isStudioRoute = () =>
+  typeof window !== 'undefined' && window.location.pathname.replace(/\/+$/, '') === '/studio';
 
 export default function App() {
   const [ready, setReady] = useState(false);
-  const lenisRef = useRef(null);
+  const [studio] = useState(isStudioRoute);
 
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) return;
-
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-    lenisRef.current = lenis;
-
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
-    // anchor links -> smooth scroll via lenis
-    const onClick = (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      const id = a.getAttribute('href');
-      if (id.length > 1) {
-        const el = document.querySelector(id);
-        if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: -80 }); }
-      }
+    if (studio) return;
+    const onScroll = () => {
+      const y = window.scrollY;
+      document.documentElement.style.setProperty('--scroll-y', `${y}`);
     };
-    document.addEventListener('click', onClick);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [studio]);
 
-    return () => {
-      cancelAnimationFrame(rafId);
-      document.removeEventListener('click', onClick);
-      lenis.destroy();
-    };
-  }, []);
+  if (studio) return <Studio />;
 
   return (
     <>
       <Preloader onDone={() => setReady(true)} />
-      <CarLayer />
+      <AuroraBackground />
       <ScrollProgress />
       <Nav />
       <div className="page">
